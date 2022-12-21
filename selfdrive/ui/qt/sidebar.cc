@@ -64,7 +64,7 @@ void Sidebar::updateState(const UIState &s) {
   // setProperty("connectStatus", QVariant::fromValue(connectStatus));
 
   ItemStatus connectStatus;
-  connectStatus = deviceState.getBatteryPercent()
+  connectStatus = deviceState.getBatteryPercent();
   if (connectStatus >= 80) {
     ItemStatus{connectStatus, good_color};
   } else if (connectStatus < 80 && connectStatus > 20) {
