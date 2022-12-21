@@ -54,12 +54,6 @@ TogglesPanel::TogglesPanel(SettingsWindow *parent) : ListWidget(parent) {
       "../assets/offroad/icon_metric.png",
     },
     {
-      "RecordFront",
-      "Record and Upload Driver Camera",
-      "Upload data from the driver facing camera and help improve the driver monitoring algorithm.",
-      "../assets/offroad/icon_monitoring.png",
-    },
-    {
       "EndToEndToggle",
       "\U0001f96c Disable use of lanelines (Alpha) \U0001f96c",
       "In this mode openpilot will ignore lanelines and just drive how it thinks a human would.",
@@ -104,11 +98,6 @@ DevicePanel::DevicePanel(SettingsWindow *parent) : ListWidget(parent) {
   addItem(new LabelControl("Serial", params.get("HardwareSerial").c_str()));
 
   // offroad-only buttons
-
-  auto dcamBtn = new ButtonControl("Driver Camera", "PREVIEW",
-                                   "Preview the driver facing camera to help optimize device mounting position for best driver monitoring experience. (vehicle must be off)");
-  connect(dcamBtn, &ButtonControl::clicked, [=]() { emit showDriverView(); });
-  addItem(dcamBtn);
 
   auto resetCalibBtn = new ButtonControl("Reset Calibration", "RESET", " ");
   connect(resetCalibBtn, &ButtonControl::showDescription, this, &DevicePanel::updateCalibDescription);
@@ -378,7 +367,6 @@ SettingsWindow::SettingsWindow(QWidget *parent) : QFrame(parent) {
   // setup panels
   DevicePanel *device = new DevicePanel(this);
   QObject::connect(device, &DevicePanel::reviewTrainingGuide, this, &SettingsWindow::reviewTrainingGuide);
-  QObject::connect(device, &DevicePanel::showDriverView, this, &SettingsWindow::showDriverView);
 
   QList<QPair<QString, QWidget *>> panels = {
     {"Device", device},

@@ -25,7 +25,6 @@ protected:
 signals:
   void closeSettings();
   void reviewTrainingGuide();
-  void showDriverView();
 
 private:
   QPushButton *sidebar_alert_widget;
@@ -40,7 +39,6 @@ public:
   explicit DevicePanel(SettingsWindow *parent);
 signals:
   void reviewTrainingGuide();
-  void showDriverView();
 
 private slots:
   void poweroff();

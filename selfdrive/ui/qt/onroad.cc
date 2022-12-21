@@ -170,7 +170,6 @@ void OnroadAlerts::paintEvent(QPaintEvent *event) {
 // OnroadHud
 OnroadHud::OnroadHud(QWidget *parent) : QWidget(parent) {
   engage_img = loadPixmap("../assets/img_chffr_wheel.png", {img_size, img_size});
-  dm_img = loadPixmap("../assets/img_driver_face.png", {img_size, img_size});
 
   connect(this, &OnroadHud::valueChanged, [=] { update(); });
 }
@@ -192,13 +191,11 @@ void OnroadHud::updateState(const UIState &s) {
   setProperty("speed", QString::number(std::nearbyint(cur_speed)));
   setProperty("maxSpeed", maxspeed_str);
   setProperty("speedUnit", s.scene.is_metric ? "km/h" : "mph");
-  setProperty("hideDM", cs.getAlertSize() != cereal::ControlsState::AlertSize::NONE);
   setProperty("status", s.status);
 
-  // update engageability and DM icons at 2Hz
+  // update engageability icon at 2Hz
   if (sm.frame % (UI_FREQ / 2) == 0) {
     setProperty("engageable", cs.getEngageable() || cs.getEnabled());
-    setProperty("dmActive", sm["driverMonitoringState"].getDriverMonitoringState().getIsActiveMode());
   }
 }
 
@@ -239,12 +236,6 @@ void OnroadHud::paintEvent(QPaintEvent *event) {
   if (engageable) {
     drawIcon(p, rect().right() - radius / 2 - bdr_s * 2, radius / 2 + int(bdr_s * 1.5),
              engage_img, bg_colors[status], 1.0);
-  }
-
-  // dm icon
-  if (!hideDM) {
-    drawIcon(p, radius / 2 + (bdr_s * 2), rect().bottom() - footer_h / 2,
-             dm_img, QColor(0, 0, 0, 70), dmActive ? 1.0 : 0.2);
   }
 }
 
@@ -303,7 +294,7 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIScene &scene) {
   if (!scene.end_to_end) {
     // lanelines
     for (int i = 0; i < std::size(scene.lane_line_vertices); ++i) {
-      painter.setBrush(QColor::fromRgbF(1.0, 1.0, 1.0, scene.lane_line_probs[i]));
+      painter.setBrush(QColor::fromRgbF(1.0, 1.0, 0.0, scene.lane_line_probs[i]));
       painter.drawPolygon(scene.lane_line_vertices[i].v, scene.lane_line_vertices[i].cnt);
     }
     // road edges
@@ -314,8 +305,8 @@ void NvgWindow::drawLaneLines(QPainter &painter, const UIScene &scene) {
   }
   // paint path
   QLinearGradient bg(0, height(), 0, height() / 4);
-  bg.setColorAt(0, scene.end_to_end ? redColor() : QColor(255, 255, 255));
-  bg.setColorAt(1, scene.end_to_end ? redColor(0) : QColor(255, 255, 255, 0));
+  bg.setColorAt(0, scene.end_to_end ? redColor() : QColor(0, 255, 0));
+  bg.setColorAt(1, scene.end_to_end ? redColor(0) : QColor(0, 255, 0, 0));
   painter.setBrush(bg);
   painter.drawPolygon(scene.track_vertices.v, scene.track_vertices.cnt);
 }
