@@ -1,50 +1,76 @@
+import math
 from common.numpy_fast import clip
-from selfdrive.car.ford.values import MAX_ANGLE
+from selfdrive.config import Conversions as CV
+from cereal import car
 
+GearShifter = car.CarState.GearShifter
 
-def create_steer_command(packer, angle_cmd, enabled, lkas_state, angle_steers, curvature, lkas_action):
-  """Creates a CAN message for the Ford Steer Command."""
-
-  #if enabled and lkas available:
-  if enabled and lkas_state in (2, 3):  # and (frame % 500) >= 3:
-    action = lkas_action
-  else:
-    action = 0xf
-    angle_cmd = angle_steers/MAX_ANGLE
-
-  angle_cmd = clip(angle_cmd * MAX_ANGLE, - MAX_ANGLE, MAX_ANGLE)
-
-  values = {
-    "Lkas_Action": action,
-    "Lkas_Alert": 0xf,             # no alerts
-    "Lane_Curvature": clip(curvature, -0.01, 0.01),   # is it just for debug?
-    #"Lane_Curvature": 0,   # is it just for debug?
-    "Steer_Angle_Req": angle_cmd
-  }
-  return packer.make_can_msg("Lane_Keep_Assist_Control", 0, values)
-
-
-def create_lkas_ui(packer, main_on, enabled, steer_alert):
-  """Creates a CAN message for the Ford Steer Ui."""
-
-  if not main_on:
-    lines = 0xf
-  elif enabled:
-    lines = 0x3
-  else:
-    lines = 0x6
-
-  values = {
-    "Set_Me_X80": 0x80,
-    "Set_Me_X45": 0x45,
-    "Set_Me_X30": 0x30,
-    "Lines_Hud": lines,
-    "Hands_Warning_W_Chime": steer_alert,
-  }
-  return packer.make_can_msg("Lane_Keep_Assist_Ui", 0, values)
+def fordchecksum(cnt, speed):
+  # Checksum is 255 - cnt - speed - df (data qualifier, 3 signals VALID data) with bitwise shifting and rounding on the speed.
+  speed = int(round(speed / 0.01, 2))
+  top = speed >> 8
+  bottom = speed & 0xff
+  cs = 255 - cnt - top - bottom - 3
+  if cs < 0:
+    cs = cs + 255
+  return cs
 
 def spam_cancel_button(packer):
   values = {
     "Cancel": 1
   }
   return packer.make_can_msg("Steering_Buttons", 0, values)
+
+def ParkAid_Data(packer, enabled, apply_steer, sappControlState, standstill):
+  # sappState 1 = Off, 2 = On | sappControl 0 = No request, 1 = Request
+  # No angle request at standstill because it causes sporadic steering wheel drift.
+  if sappControlState in [1, 2]:
+    sappState = 2
+    sappControl = 0
+    if enabled and not standstill:
+      sappControl = 1
+  else:
+    sappState = 1
+    sappControl = 0
+
+  values = {
+    "ApaSys_D_Stat": sappState,
+    "EPASExtAngleStatReq": sappControl,
+    "ExtSteeringAngleReq2": apply_steer,
+  }
+  return packer.make_can_msg("ParkAid_Data", 2, values)
+
+def EngVehicleSpThrottle2(packer, frame, speed, gearShifter):
+  # If in reverse, send appropriate data
+  if gearShifter == GearShifter.reverse:
+    reverse = 3
+    trailer = 1
+  else:
+    reverse = 1
+    trailer = 0
+
+  cnt = frame % 16
+  cs = fordchecksum(cnt, speed)
+
+  values = {
+    "VehVTrlrAid_B_Avail": trailer,
+    "VehVActlEng_No_Cs": cs,
+    "VehVActlEng_No_Cnt": cnt,
+    "VehVActlEng_D_Qf": 3,
+    "Veh_V_ActlEng": speed,
+    "GearRvrse_D_Actl": reverse,
+  }
+  return packer.make_can_msg("EngVehicleSpThrottle2", 2, values)
+
+def BrakeSysFeatures(packer, frame, speed):
+  cnt = frame % 16
+  cs = fordchecksum(cnt, speed)
+
+  values = {
+    "LsmcBrkDecel_D_Stat": 4,
+    "VehVActlBrk_No_Cs": cs,
+    "Veh_V_ActlBrk": speed,
+    "VehVActlBrk_No_Cnt": cnt,
+    "VehVActlBrk_D_Qf": 3,
+  }
+  return packer.make_can_msg("BrakeSysFeatures", 2, values)
