@@ -6,7 +6,6 @@
 
 #include <sstream>
 #include <string>
-#include <QString>
 
 void Sidebar::drawMetric(QPainter &p, const QString &label, QColor c, int y) {
   const QRect rect = {30, y, 240, label.contains("\n") ? 124 : 100};
