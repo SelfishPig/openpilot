@@ -9,34 +9,20 @@ GearShifter = car.CarState.GearShifter
 class CarState(CarStateBase):
   def __init__(self, CP):
     super().__init__(CP)
-    self.toggle_last = False
-    self.debug_cruise = False
     
   def update(self, cp, cp_cam):
     ret = car.CarState.new_message()
     
     ret.genericToggle = bool(cp.vl["Steering_Wheel_Data2_FD1"]['SteWhlSwtchOk_B_Stat'])
-    if ret.genericToggle == True and self.toggle_last == False:
-      if self.debug_cruise == True:
-        self.debug_cruise = False
-      else:
-        self.debug_cruise = True
-    self.toggle_last = ret.genericToggle
 
     ret.vEgoRaw = cp.vl["BrakeSysFeatures"]['Veh_V_ActlBrk'] * CV.KPH_TO_MS
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
     ret.standstill = (ret.vEgo < 0.1)
-
-    if self.debug_cruise:
-      ret.gasPressed = False
-      ret.brakePressed = False
-      ret.cruiseState.enabled = True
-      ret.cruiseState.available = True
-    else:    
-      ret.gasPressed = cp.vl["EngVehicleSpThrottle"]['ApedPos_Pc_ActlArb'] / 100. > 1e-6
-      ret.brakePressed = cp.vl["EngBrakeData"]['BpedDrvAppl_D_Actl'] == 2
-      ret.cruiseState.enabled = not cp.vl["EngBrakeData"]['CcStat_D_Actl'] in [0, 3]
-      ret.cruiseState.available = cp.vl["EngBrakeData"]['CcStat_D_Actl'] != 0
+ 
+    ret.gasPressed = cp.vl["EngVehicleSpThrottle"]['ApedPos_Pc_ActlArb'] / 100. > 1e-6
+    ret.brakePressed = cp.vl["EngBrakeData"]['BpedDrvAppl_D_Actl'] == 2
+    ret.cruiseState.enabled = not cp.vl["EngBrakeData"]['CcStat_D_Actl'] in [0, 3]
+    ret.cruiseState.available = cp.vl["EngBrakeData"]['CcStat_D_Actl'] != 0
     
     ret.cruiseState.speed = cp.vl["EngBrakeData"]['Veh_V_DsplyCcSet'] * CV.MPH_TO_MS
     ret.steeringAngleDeg = cp.vl["BrakeSnData_5"]['SteWhlRelInit_An_Sns']
@@ -63,9 +49,6 @@ class CarState(CarStateBase):
     ret.rightBlinker = cp.vl["Steering_Buttons"]['Right_Turn_Light'] > 0
 
     ret.seatbeltUnlatched = cp.vl["RCMStatusMessage2_FD1"]['FirstRowBuckleDriver'] == 2
-
-    #ret.stockFcw = cp.vl["ACCDATA_3"]['FcwVisblWarn_B_Rq'] != 0
-    #ret.stockAeb = ret.cruiseState.enabled and ret.stockFcw
 
     self.sappControlState = cp_cam.vl["EPAS_INFO"]['SAPPAngleControlStat1']
 

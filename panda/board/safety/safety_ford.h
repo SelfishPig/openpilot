@@ -8,28 +8,12 @@ const struct lookup_t FORD_LOOKUP_ANGLE_RATE_DOWN = {
 
 const int FORD_DEG_TO_CAN = 10;
 
-bool toggle_last = false;
-bool debug_cruise = false;
-
 static int ford_rx_hook(CANPacket_t *to_push) {
   int bus = GET_BUS(to_push);
   int addr = GET_ADDR(to_push);
   if(bus == 0) {
     if(addr == 0x415) {
       vehicle_speed = ((GET_BYTE(to_push, 0) << 8) | (GET_BYTE(to_push, 1))) * 0.01 / 3.6;
-    }
-    if(addr == 0x81) {
-        bool toggle_pressed = ((GET_BYTE(to_push, 0) & 0x10) >> 4);
-        if(toggle_pressed && !toggle_last) {
-            if(debug_cruise == false) {
-                debug_cruise = true;
-                controls_allowed = 1;
-            } else {
-                debug_cruise = false;
-                controls_allowed = 0;
-            }
-        }
-        toggle_last = toggle_pressed;
     }
     if(addr == 0x165) {
       int cruise_state = (GET_BYTE(to_push, 1) & 0x7);
@@ -38,9 +22,7 @@ static int ford_rx_hook(CANPacket_t *to_push) {
         controls_allowed = 1;
       }
       if(!cruise_engaged) {
-          if (!debug_cruise) {
-            controls_allowed = 0;
-          }
+        controls_allowed = 0;
       }
       cruise_engaged_prev = cruise_engaged;
     }
@@ -80,7 +62,6 @@ static int ford_tx_hook(CANPacket_t *to_send) {
   if(violation) {
     tx = 0;
     controls_allowed = 0;
-    debug_cruise = false;
   }
   return tx;
 }
