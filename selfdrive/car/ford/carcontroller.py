@@ -43,7 +43,7 @@ class CarController():
       can_sends.append(EngVehicleSpThrottle2(self.packer, frame, apply_speed, CS.out.gearShifter))
       can_sends.append(ParkAid_Data(self.packer, self.steer_enabled, apply_steer, CS.sappControlState, CS.out.standstill))
       
-    new_actuators = actuators.copy()
-    new_actuators.steeringAngleDeg = apply_steer
+      new_actuators = actuators.copy()
+      new_actuators.steeringAngleDeg = apply_steer
 
-    return new_actuators, can_sends
+      return new_actuators, can_sends
