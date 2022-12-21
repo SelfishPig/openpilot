@@ -16,7 +16,6 @@ class CarInterface(CarInterfaceBase):
     ret = CarInterfaceBase.get_std_params(candidate, fingerprint)
     ret.carName = "ford"
     ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.ford)]
-    ret.communityFeature = True
     ret.dashcamOnly = False
     ret.openpilotLongitudinalControl = True
     ret.minEnableSpeed = -1
