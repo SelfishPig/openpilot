@@ -30,7 +30,7 @@ procs = [
   PythonProcess("pandad", "selfdrive.pandad", persistent=True),
   PythonProcess("paramsd", "selfdrive.locationd.paramsd"),
   PythonProcess("plannerd", "selfdrive.controls.plannerd"),
-  PythonProcess("radard", "selfdrive.controls.radard", enabled=False),
+  PythonProcess("radard", "selfdrive.controls.radard"),
   PythonProcess("thermald", "selfdrive.thermald.thermald", persistent=True),
   PythonProcess("timezoned", "selfdrive.timezoned", enabled=False, persistent=True),
   PythonProcess("tombstoned", "selfdrive.tombstoned", enabled=False, persistent=True),
