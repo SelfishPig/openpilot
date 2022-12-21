@@ -24,7 +24,7 @@ procs = [
   NativeProcess("boardd", "selfdrive/boardd", ["./boardd"], enabled=False),
   PythonProcess("calibrationd", "selfdrive.locationd.calibrationd"),
   PythonProcess("controlsd", "selfdrive.controls.controlsd"),
-  PythonProcess("deleter", "selfdrive.loggerd.deleter", enabled=False, persistent=True),
+  PythonProcess("deleter", "selfdrive.loggerd.deleter", enabled=True, persistent=True),
   PythonProcess("dmonitoringd", "selfdrive.monitoring.dmonitoringd", enabled=False, driverview=False),
   PythonProcess("logmessaged", "selfdrive.logmessaged", enabled=False, persistent=True),
   PythonProcess("pandad", "selfdrive.pandad", persistent=True),
