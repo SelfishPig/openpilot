@@ -5,6 +5,7 @@
 #include "selfdrive/ui/qt/util.h"
 
 #include <sstream>
+#include <string>
 
 void Sidebar::drawMetric(QPainter &p, const QString &label, QColor c, int y) {
   const QRect rect = {30, y, 240, label.contains("\n") ? 124 : 100};
@@ -67,15 +68,15 @@ void Sidebar::updateState(const UIState &s) {
 
   ItemStatus batteryStatus;
   auto battery_percentage = deviceState.getBatteryPercent();
-  std::stringstream status;
-  status << "BATTERY\n" << battery_percentage << "%";
-  string status2 = status.str();
+  std::stringstream ss;
+  ss << "BATTERY\n" << battery_percentage << "%";
+  std::string status = ss.str();
   if (battery_percentage >= 80) {
-    batteryStatus = ItemStatus{status2, good_color};
+    batteryStatus = ItemStatus{status, good_color};
   } else if (battery_percentage < 80 && battery_percentage > 20) {
-    batteryStatus = ItemStatus{status2, warning_color};
+    batteryStatus = ItemStatus{status, warning_color};
   } else if (battery_percentage <= 20) {
-    batteryStatus = ItemStatus{status2, danger_color};
+    batteryStatus = ItemStatus{status, danger_color};
   }
   setProperty("batteryStatus", QVariant::fromValue(batteryStatus));
 
