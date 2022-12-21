@@ -25,7 +25,7 @@ class CarState(CarStateBase):
 
     ret.vEgoRaw = cp.vl["BrakeSysFeatures"]['Veh_V_ActlBrk'] * CV.KPH_TO_MS
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
-    ret.standstill = not ret.vEgoRaw > 0.001
+    ret.standstill = (ret.vEgo < 0.1)
 
     if self.debug_cruise:
       ret.gasPressed = False
@@ -39,7 +39,6 @@ class CarState(CarStateBase):
       ret.cruiseState.available = cp.vl["EngBrakeData"]['CcStat_D_Actl'] != 0
     
     ret.cruiseState.speed = cp.vl["EngBrakeData"]['Veh_V_DsplyCcSet'] * CV.MPH_TO_MS
-    
     ret.steeringAngleDeg = cp.vl["BrakeSnData_5"]['SteWhlRelInit_An_Sns']
     ret.steeringPressed = True
     ret.steeringTorque = cp_cam.vl["EPAS_INFO"]['SteeringColumnTorque']
@@ -65,12 +64,8 @@ class CarState(CarStateBase):
 
     ret.seatbeltUnlatched = cp.vl["RCMStatusMessage2_FD1"]['FirstRowBuckleDriver'] == 2
 
-    ret.leftBlindspot = cp.vl["Side_Detect_L_Stat"]['SodDetctLeft_D_Stat'] !=0
-    ret.rightBlindspot = cp.vl["Side_Detect_R_Stat"]['SodDetctRight_D_Stat'] !=0
-
-
-    ret.stockFcw = cp.vl["ACCDATA_3"]['FcwVisblWarn_B_Rq'] != 0
-    ret.stockAeb = ret.cruiseState.enabled and ret.stockFcw
+    #ret.stockFcw = cp.vl["ACCDATA_3"]['FcwVisblWarn_B_Rq'] != 0
+    #ret.stockAeb = ret.cruiseState.enabled and ret.stockFcw
 
     self.sappControlState = cp_cam.vl["EPAS_INFO"]['SAPPAngleControlStat1']
 
