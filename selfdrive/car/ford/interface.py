@@ -17,7 +17,7 @@ class CarInterface(CarInterfaceBase):
     ret.carName = "ford"
     ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.ford)]
     ret.dashcamOnly = False
-    ret.openpilotLongitudinalControl = True
+    #ret.openpilotLongitudinalControl = True
     ret.minEnableSpeed = -1
 
     ret.steerRateCost = 1.0
