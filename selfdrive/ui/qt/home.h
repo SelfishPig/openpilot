@@ -45,7 +45,6 @@ signals:
 
 public slots:
   void offroadTransition(bool offroad);
-  void showDriverView(bool show);
   void showSidebar(bool show);
 
 protected:
@@ -55,6 +54,5 @@ private:
   Sidebar *sidebar;
   OffroadHome *home;
   OnroadWindow *onroad;
-  DriverViewWindow *driver_view;
   QStackedLayout *slayout;
 };
