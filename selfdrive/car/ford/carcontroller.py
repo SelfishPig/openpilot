@@ -10,7 +10,7 @@ class CarController():
     self.packer = CANPacker(dbc_name)
     self.last_angle = 0
 
-  def update(self, enabled, CS, frame, actuators, cruise_cancel):
+  def update(self, c, enabled, CS, frame, actuators, cruise_cancel):
     can_sends = []
 
     if cruise_cancel:
@@ -33,10 +33,10 @@ class CarController():
     
     self.last_angle = apply_angle
 
-    if (frame % CarControllerParams.APA_STEP) == 0:
-      can_sends.append(BrakeSysFeatures(self.packer, frame, apply_speed))
-      can_sends.append(EngVehicleSpThrottle2(self.packer, frame, apply_speed, CS.out.gearShifter))
-      can_sends.append(ParkAid_Data(self.packer, enabled, apply_angle, CS.sappControlState, CS.out.standstill))
+    #if (frame % CarControllerParams.APA_STEP) == 0:
+    can_sends.append(BrakeSysFeatures(self.packer, frame, apply_speed))
+    can_sends.append(EngVehicleSpThrottle2(self.packer, frame, apply_speed, CS.out.gearShifter))
+    can_sends.append(ParkAid_Data(self.packer, c.active, apply_angle, CS.sappControlState, CS.out.standstill))
       
     new_actuators = actuators.copy()
     new_actuators.steeringAngleDeg = apply_angle
