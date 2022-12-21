@@ -69,12 +69,13 @@ void Sidebar::updateState(const UIState &s) {
   auto battery_percentage = deviceState.getBatteryPercent();
   std::stringstream status;
   status << "BATTERY\n" << battery_percentage << "%";
+  string status2 = status.str();
   if (battery_percentage >= 80) {
-    batteryStatus = ItemStatus{status.str(), good_color};
+    batteryStatus = ItemStatus{status2, good_color};
   } else if (battery_percentage < 80 && battery_percentage > 20) {
-    batteryStatus = ItemStatus{status.str(), warning_color};
+    batteryStatus = ItemStatus{status2, warning_color};
   } else if (battery_percentage <= 20) {
-    batteryStatus = ItemStatus{status.str(), danger_color};
+    batteryStatus = ItemStatus{status2, danger_color};
   }
   setProperty("batteryStatus", QVariant::fromValue(batteryStatus));
 
