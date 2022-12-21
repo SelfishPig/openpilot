@@ -21,15 +21,17 @@ class CarController():
 
     if enabled:
       apply_speed = 0
-      apply_angle = actuators.steeringAngleDeg
-      steer_up = (self.last_angle * apply_angle > 0. and abs(apply_angle) > abs(self.last_angle))
-      rate_limit = CarControllerParams.RATE_LIMIT_UP if steer_up else CarControllerParams.RATE_LIMIT_DOWN
-      max_angle_diff = interp(CS.out.vEgo, rate_limit.speed_points, rate_limit.max_angle_diff_points)
-      apply_angle = clip(apply_angle, (self.last_angle - max_angle_diff), (self.last_angle + max_angle_diff))    
-      angle_limit = CarControllerParams.ANGLE_LIMIT
-      max_angle = interp(CS.out.vEgo, angle_limit.speed_points, angle_limit.max_angle_points)
-      apply_angle = clip(apply_angle, -max_angle, max_angle)
-      self.last_angle = apply_angle
+      if CS.sappControlState == 2:
+        apply_angle = actuators.steeringAngleDeg
+        steer_up = (self.last_angle * apply_angle > 0. and abs(apply_angle) > abs(self.last_angle))
+        rate_limit = CarControllerParams.RATE_LIMIT_UP if steer_up else CarControllerParams.RATE_LIMIT_DOWN
+        max_angle_diff = interp(CS.out.vEgo, rate_limit.speed_points, rate_limit.max_angle_diff_points)
+        apply_angle = clip(apply_angle, (self.last_angle - max_angle_diff), (self.last_angle + max_angle_diff))    
+        angle_limit = CarControllerParams.ANGLE_LIMIT
+        max_angle = interp(CS.out.vEgo, angle_limit.speed_points, angle_limit.max_angle_points)
+        apply_angle = clip(apply_angle, -max_angle, max_angle)
+    
+    self.last_angle = apply_angle
 
     if (frame % CarControllerParams.APA_STEP) == 0:
       can_sends.append(BrakeSysFeatures(self.packer, frame, apply_speed))

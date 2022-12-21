@@ -22,13 +22,11 @@ def spam_cancel_button(packer):
   return packer.make_can_msg("Steering_Buttons", 0, values)
 
 def ParkAid_Data(packer, enabled, apply_steer, sappControlState, standstill):
-  # sappState 1 = Off, 2 = On | sappControl 0 = No request, 1 = Request
+  # sappState 1 = APA Off, 2 = APA On | sappControl 0 = No request, 1 = Request
   # No angle request at standstill because it causes sporadic steering wheel drift.
-  if sappControlState in [1, 2]:
+  if sappControlState in [1, 2] and enabled:
     sappState = 2
-    sappControl = 0
-    if enabled and not standstill:
-      sappControl = 1
+    sappControl = 1
   else:
     sappState = 1
     sappControl = 0
