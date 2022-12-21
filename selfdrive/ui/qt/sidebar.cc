@@ -63,16 +63,16 @@ void Sidebar::updateState(const UIState &s) {
   // }
   // setProperty("connectStatus", QVariant::fromValue(connectStatus));
 
-  ItemStatus connectStatus;
+  ItemStatus batteryStatus;
   auto battery_percentage = deviceState.getBatteryPercent();
   if (battery_percentage >= 80) {
-    connectStatus = ItemStatus{battery_percentage, good_color};
+    batteryStatus = ItemStatus{"BATTERY\nHIGH", good_color};
   } else if (battery_percentage < 80 && battery_percentage > 20) {
-    connectStatus =ItemStatus{battery_percentage, warning_color};
+    batteryStatus = ItemStatus{"BATTERY\nMEDIUM", warning_color};
   } else if (battery_percentage <= 20) {
-    connectStatus = ItemStatus{battery_percentage, danger_color};
+    batteryStatus = ItemStatus{"BATTERY\nLOW", danger_color};
   }
-  setProperty("connectStatus", QVariant::fromValue(connectStatus));
+  setProperty("batteryStatus", QVariant::fromValue(batteryStatus));
 
   ItemStatus tempStatus = {"TEMP\nHIGH", danger_color};
   auto ts = deviceState.getThermalStatus();
@@ -122,5 +122,5 @@ void Sidebar::paintEvent(QPaintEvent *event) {
   // metrics
   drawMetric(p, temp_status.first, temp_status.second, 338);
   drawMetric(p, panda_status.first, panda_status.second, 496);
-  drawMetric(p, connect_status.first, connect_status.second, 654);
+  drawMetric(p, battery_status.first, battery_status.second, 654);
 }
