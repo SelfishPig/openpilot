@@ -97,9 +97,9 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
   QWidget* bgWidget = new QWidget(this);
   QGridLayout* bgLayout = new QGridLayout(bgWidget);
   QLabel* bgLabel = new QLabel(bgLayout);
-  //bgWidget->setLayout(bgLayout);
+  bgWidget->setLayout(bgLayout);
   bgLabel->setPixmap(bg_img);
-  //bgLayout->addWidget(bgLabel);
+  bgLayout->addWidget(bgLabel);
   bgLayout->setAlignment(bgLabel, Qt::AlignCenter);
   center_layout->addWidget(bgWidget);
 
