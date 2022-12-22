@@ -122,8 +122,7 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
     }
     OffroadHome {
       background-color: black;
-      background-image: url(/data/openpilot/selfdrive/assets/background.png);
-      background-size: 100%;
+      border-image: url(/data/openpilot/selfdrive/assets/background.png) 0 0 0 0 stretch stretch;
     }
     OffroadHome > QPushButton {
       padding: 15px 30px;
