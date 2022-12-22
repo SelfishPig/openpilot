@@ -88,13 +88,6 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
   main_layout->addSpacing(25);
   center_layout = new QStackedLayout();
 
-  // QWidget* statsAndSetupWidget = new QWidget(this);
-  // QHBoxLayout* statsAndSetup = new QHBoxLayout(statsAndSetupWidget);
-  // statsAndSetup->setMargin(0);
-  // statsAndSetup->setSpacing(30);
-  // statsAndSetup->addWidget(new DriveStats, 1);
-  // statsAndSetup->addWidget(new SetupWidget);
-
   // Add a blank widget
   QWidget* spacerWidget = new QWidget(this);
   spacerWidget->setStyleSheet("border-image: url(/data/openpilot/selfdrive/assets/background.png) 0 0 0 0 stretch stretch");
