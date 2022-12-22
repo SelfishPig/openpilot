@@ -94,9 +94,9 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
   // center_layout->addWidget(spacerWidget);
 
   QPixmap bg_img = loadPixmap("../assets/background.png", {180, 180});
-  QWidget* spacerWidget = new QWidget(this);
-  QHBoxLayout* bgLayout = new QHBoxLayout(this);
-  QLabel* bgLabel = new QLabel(this);
+  QWidget* spacerWidget = new QWidget();
+  QHBoxLayout* bgLayout = new QHBoxLayout();
+  QLabel* bgLabel = new QLabel();
   bgLabel->setPixmap(bg_img);
   bgLayout->addWidget(bgLabel);
   spacerWidget->setLayout(bgLayout);
