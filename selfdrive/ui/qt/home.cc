@@ -88,14 +88,14 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
   main_layout->addSpacing(25);
   center_layout = new QStackedLayout();
 
-  // QWidget* statsAndSetupWidget = new QWidget(this);
-  // QHBoxLayout* statsAndSetup = new QHBoxLayout(statsAndSetupWidget);
-  // statsAndSetup->setMargin(0);
-  // statsAndSetup->setSpacing(30);
-  // statsAndSetup->addWidget(new DriveStats, 1);
-  // statsAndSetup->addWidget(new SetupWidget);
+  QWidget* statsAndSetupWidget = new QWidget(this);
+  QHBoxLayout* statsAndSetup = new QHBoxLayout(statsAndSetupWidget);
+  statsAndSetup->setMargin(0);
+  statsAndSetup->setSpacing(30);
+  statsAndSetup->addWidget(new DriveStats, 1);
+  statsAndSetup->addWidget(new SetupWidget);
 
-  // center_layout->addWidget(statsAndSetupWidget);
+  center_layout->addWidget(statsAndSetupWidget);
 
   // add update & alerts widgets
   update_widget = new UpdateAlert();
@@ -118,6 +118,7 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
     OffroadHome {
       background-color: black;
       background-image: url(/data/openpilot/selfdrive/assets/background.png);
+      background-size: 100%;
     }
     OffroadHome > QPushButton {
       padding: 15px 30px;
