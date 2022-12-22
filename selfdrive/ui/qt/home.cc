@@ -88,14 +88,19 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
   main_layout->addSpacing(25);
   center_layout = new QStackedLayout();
 
-  QWidget* statsAndSetupWidget = new QWidget(this);
-  QHBoxLayout* statsAndSetup = new QHBoxLayout(statsAndSetupWidget);
-  statsAndSetup->setMargin(0);
-  statsAndSetup->setSpacing(30);
-  statsAndSetup->addWidget(new DriveStats, 1);
-  statsAndSetup->addWidget(new SetupWidget);
+  // QWidget* statsAndSetupWidget = new QWidget(this);
+  // QHBoxLayout* statsAndSetup = new QHBoxLayout(statsAndSetupWidget);
+  // statsAndSetup->setMargin(0);
+  // statsAndSetup->setSpacing(30);
+  // statsAndSetup->addWidget(new DriveStats, 1);
+  // statsAndSetup->addWidget(new SetupWidget);
 
-  center_layout->addWidget(statsAndSetupWidget);
+  QWidget* spacerWidget = new QWidget(this);
+  spacerWidget->setMargin(0);
+  //QHBoxLayout* spacer = new QHBoxLayout(spacerWidget);
+  //spacer->addStretch();
+
+  center_layout->addWidget(spacerWidget);
 
   // add update & alerts widgets
   update_widget = new UpdateAlert();
