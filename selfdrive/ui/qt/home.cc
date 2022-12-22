@@ -96,7 +96,7 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
   // statsAndSetup->addWidget(new SetupWidget);
 
   QWidget* spacerWidget = new QWidget(this);
-  spacerWidget->setMargin(0);
+  //spacerWidget->setMargin(0);
   //QHBoxLayout* spacer = new QHBoxLayout(spacerWidget);
   //spacer->addStretch();
 
