@@ -99,7 +99,7 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
   QLabel* bgLabel = new QLabel(this);
   bgLabel->setPixmap(bg_img);
   bgLayout->addWidget(bgLabel);
-  spacerWidget->addLayout(bgLayout);
+  spacerWidget->setLayout(bgLayout);
   center_layout->addWidget(spacerWidget);
 
   // add update & alerts widgets
