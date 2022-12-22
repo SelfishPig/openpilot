@@ -99,6 +99,7 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
   QLabel* bgLabel = new QLabel();
   bgLabel->setPixmap(bg_img);
   bgLayout->addWidget(bgLabel, Qt::AlignCenter);
+  bgLayout->addStretch(1);
   spacerWidget->setLayout(bgLayout);
   center_layout->addWidget(spacerWidget);
 
