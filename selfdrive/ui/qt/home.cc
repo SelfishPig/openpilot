@@ -93,8 +93,9 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
   // spacerWidget->setStyleSheet("border-image: url(/data/openpilot/selfdrive/assets/background.png) 0 0 0 0 stretch stretch");
   // center_layout->addWidget(spacerWidget);
 
-  bg_img = loadPixmap("../assets/background.png", {180, 180});
-  QWidget* spacerWidget = new QWidget(this);
+  QPixmap* bg_img = loadPixmap("../assets/background.png", {180, 180});
+  //QWidget* spacerWidget = new QWidget(this);
+  QHBoxLayout* spacerWidget = new QHBoxLayout();
   QLabel* bgWidget = new QLabel(this);
   bgWidget->setPixmap(bg_img);
   spacerWidget->addWidget(bgWidget);
