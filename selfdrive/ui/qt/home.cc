@@ -95,12 +95,11 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
 
   QPixmap bg_img = loadPixmap("../assets/background.png", {400, 400});
   QWidget* spacerWidget = new QWidget();
-  QHBoxLayout* bgLayout = new QHBoxLayout();
+  QBoxLayout* bgLayout = new QBoxLayout(QBoxLayout::LeftToRight);
   QLabel* bgLabel = new QLabel();
+  spacerWidget->setLayout(bgLayout);
   bgLabel->setPixmap(bg_img);
   bgLayout->addWidget(bgLabel, Qt::AlignCenter);
-  bgLayout->addStretch(1);
-  spacerWidget->setLayout(bgLayout);
   center_layout->addWidget(spacerWidget);
 
   // add update & alerts widgets
