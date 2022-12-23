@@ -24,16 +24,19 @@ def spam_cancel_button(packer):
 def ParkAid_Data(packer, active, apply_steer, sappControlState, standstill):
   # sappState 1 = APA Off, 2 = APA On | sappControl 0 = No request, 1 = Request
   # No angle request at standstill because it causes sporadic steering wheel drift.
-  if sappControlState in [1, 2] and active:
-    sappState = 2
-    sappControl = 1
+  if sappControlState == 1 and active:
+    apaOn = 2
+    apaReq = 0
+  else if sappControlState == 2 and active:
+    apaOn = 2
+    apaReq = 1
   else:
-    sappState = 1
-    sappControl = 0
+    apaOn = 1
+    apaReq = 0
 
   values = {
-    "ApaSys_D_Stat": sappState,
-    "EPASExtAngleStatReq": sappControl,
+    "ApaSys_D_Stat": apaOn,
+    "EPASExtAngleStatReq": apaReq,
     "ExtSteeringAngleReq2": apply_steer,
   }
   return packer.make_can_msg("ParkAid_Data", 2, values)
