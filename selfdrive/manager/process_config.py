@@ -12,7 +12,7 @@ procs = [
   NativeProcess("clocksd", "selfdrive/clocksd", ["./clocksd"]),
   NativeProcess("dmonitoringmodeld", "selfdrive/modeld", ["./dmonitoringmodeld"], enabled=False, driverview=False),
   NativeProcess("logcatd", "selfdrive/logcatd", ["./logcatd"], enabled=False),
-  NativeProcess("loggerd", "selfdrive/loggerd", ["./loggerd"], enabled=False),
+  NativeProcess("loggerd", "selfdrive/loggerd", ["./loggerd"], enabled=True),
   NativeProcess("modeld", "selfdrive/modeld", ["./modeld"]),
   NativeProcess("navd", "selfdrive/ui/navd", ["./navd"], enabled=False, persistent=True),
   NativeProcess("proclogd", "selfdrive/proclogd", ["./proclogd"], enabled=False),
