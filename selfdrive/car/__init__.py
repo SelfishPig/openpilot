@@ -6,6 +6,7 @@ from common.numpy_fast import clip, interp
 # kg of standard extra cargo to count for drive, gas, etc...
 STD_CARGO_KG = 136.
 
+AngleRateLimit = namedtuple('AngleRateLimit', ['speed_bp', 'angle_v'])
 
 def gen_empty_fingerprint():
   return {i: {} for i in range(0, 4)}
