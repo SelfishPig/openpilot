@@ -27,7 +27,7 @@ class CarController():
         else:
           apply_angle = CS.out.steeringAngleDeg
       else:
-        apply_speed = CS.out.vEgoRaw * CV.MS_TO_KPH
+        apply_speed = CS.vSpeed
           
       can_sends.append(BrakeSysFeatures(self.packer, frame, apply_speed))
       can_sends.append(EngVehicleSpThrottle2(self.packer, frame, apply_speed, CS.out.gearShifter))
