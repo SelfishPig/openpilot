@@ -15,19 +15,23 @@ class CarState(CarStateBase):
     
     ret.genericToggle = bool(cp.vl["Steering_Wheel_Data2_FD1"]['SteWhlSwtchOk_B_Stat'])
 
-    ret.vEgoRaw = cp.vl["BrakeSysFeatures"]['Veh_V_ActlBrk'] * CV.KPH_TO_MS
+    self.vSpeed = cp.vl["BrakeSysFeatures"]['Veh_V_ActlBrk']
+    self.sappControlState = cp_cam.vl["EPAS_INFO"]['SAPPAngleControlStat1']
+    
+    ret.vEgoRaw = self.vSpeed * CV.KPH_TO_MS
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
-    ret.standstill = (ret.vEgo < 0.1)
+    ret.standstill = cp.vl["DesiredTorqBrk"]['VehStop_D_Stat'] == 1
  
     ret.gasPressed = cp.vl["EngVehicleSpThrottle"]['ApedPos_Pc_ActlArb'] / 100. > 1e-6
     ret.brakePressed = cp.vl["EngBrakeData"]['BpedDrvAppl_D_Actl'] == 2
+    
     ret.cruiseState.enabled = not cp.vl["EngBrakeData"]['CcStat_D_Actl'] in [0, 3]
     ret.cruiseState.available = cp.vl["EngBrakeData"]['CcStat_D_Actl'] != 0
-    
     ret.cruiseState.speed = cp.vl["EngBrakeData"]['Veh_V_DsplyCcSet'] * CV.MPH_TO_MS
+    
     ret.steeringAngleDeg = cp.vl["BrakeSnData_5"]['SteWhlRelInit_An_Sns']
-    ret.steeringPressed = True
     ret.steeringTorque = cp_cam.vl["EPAS_INFO"]['SteeringColumnTorque']
+    ret.steeringPressed = True
     ret.steerWarning = cp_cam.vl["EPAS_INFO"]['SteMdule_D_Stat'] not in [0, 2]
     ret.steerError = False
 
@@ -44,13 +48,10 @@ class CarState(CarStateBase):
       ret.gearShifter = GearShifter.unknown
 
     ret.doorOpen = any([cp.vl["BodyInfo_3_FD1"]['DrStatDrv_B_Actl'],cp.vl["BodyInfo_3_FD1"]['DrStatPsngr_B_Actl'], cp.vl["BodyInfo_3_FD1"]['DrStatRl_B_Actl'], cp.vl["BodyInfo_3_FD1"]['DrStatRr_B_Actl']])
-
-    ret.leftBlinker = cp.vl["Steering_Buttons"]['Left_Turn_Light'] > 0
-    ret.rightBlinker = cp.vl["Steering_Buttons"]['Right_Turn_Light'] > 0
-
     ret.seatbeltUnlatched = cp.vl["RCMStatusMessage2_FD1"]['FirstRowBuckleDriver'] == 2
-
-    self.sappControlState = cp_cam.vl["EPAS_INFO"]['SAPPAngleControlStat1']
+    
+    ret.leftBlinker = cp.vl["Steering_Buttons"]['Left_Turn_Light'] != 0
+    ret.rightBlinker = cp.vl["Steering_Buttons"]['Right_Turn_Light'] != 0
 
     return ret
 
@@ -72,9 +73,7 @@ class CarState(CarStateBase):
       ("Left_Turn_Light", "Steering_Buttons", 0.),
       ("Right_Turn_Light", "Steering_Buttons", 0.),
       ("FirstRowBuckleDriver", "RCMStatusMessage2_FD1", 0.),
-      ("SodDetctLeft_D_Stat", "Side_Detect_L_Stat", 0.),
-      ("SodDetctRight_D_Stat", "Side_Detect_R_Stat", 0.),
-      ("FcwVisblWarn_B_Rq", "ACCDATA_3", 0.),
+      ("VehStop_D_Stat", "DesiredTorqBrk", 0.),
     ]
     checks = []
     return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 0, enforce_checks=False)
