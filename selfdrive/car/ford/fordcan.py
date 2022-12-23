@@ -24,10 +24,7 @@ def spam_cancel_button(packer):
 def ParkAid_Data(packer, active, apply_steer, sappControlState):
   # apaOn 1 = APA Off, 2 = APA On | apaReq 0 = No angle request, 1 = Request
   # No angle request at standstill because it causes sporadic steering wheel drift.
-  if sappControlState == 1 and active:
-    apaOn = 2
-    apaReq = 0
-  else if sappControlState == 2 and active:
+  if sappControlState in [1, 2] and active:
     apaOn = 2
     apaReq = 1
   else:
