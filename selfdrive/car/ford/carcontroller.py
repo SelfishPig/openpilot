@@ -31,7 +31,7 @@ class CarController():
           
       can_sends.append(BrakeSysFeatures(self.packer, frame, apply_speed))
       can_sends.append(EngVehicleSpThrottle2(self.packer, frame, apply_speed, CS.out.gearShifter))
-      can_sends.append(ParkAid_Data(self.packer, c.active, apply_angle, CS.sappControlState, CS.out.standstill))
+      can_sends.append(ParkAid_Data(self.packer, c.active, apply_angle, CS.sappControlState))
     
     self.apply_angle_last = apply_angle
     
