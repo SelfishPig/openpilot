@@ -89,7 +89,7 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       uint8_t cnt = (GET_BYTE(to_fwd, 2) & 0x3C) >> 2; // Get counter value
       uint8_t cs = ford_checksum(cnt); // Calculate checksum based on 0 speed
       to_send.data[0] = 0x00; // Set speed line 1 to 0
-      to_send.data[0] = 0x00; // Set speed line 2 to 0
+      to_send.data[1] = 0x00; // Set speed line 2 to 0
       to_send.data[2] = GET_BYTE(to_fwd, 2);
       to_send.data[3] = cs; // Set checksum
       to_send.data[4] = GET_BYTE(to_fwd, 4);
