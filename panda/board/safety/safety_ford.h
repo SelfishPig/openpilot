@@ -93,7 +93,8 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       //uint8_t cs = ford_checksum(cnt); // Calculate checksum
       uint32_t RDLR = GET_BYTES_04(to_fwd); // Get first 4 bytes
       uint32_t RDHR = GET_BYTES_48(to_fwd); // Get second 4 bytes
-      RDLR = (RDLR & 0xFFFF); // Set speed to 0;
+      RDLR = (RDLR & 0x0000FFFF); // Set speed to 0;
+      RDHR = (RDHR & 0xFFFF0000); // test
       //RDLR = ((RDLR & 0xFF) | cs); // Replace the checksum
       WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
       WORD_TO_BYTE_ARRAY(&to_send.data[0],RDLR);
@@ -111,7 +112,8 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       //uint8_t cs = ford_checksum(cnt); // Calculate checksum
       uint32_t RDLR = GET_BYTES_04(to_fwd); // Get first 4 bytes
       uint32_t RDHR = GET_BYTES_48(to_fwd); // Get second 4 bytes
-      RDHR = (RDHR & 0xFFFFFFFF); // Set speed to 0;
+      RDHR = (RDHR & 0xFF0000FF); // Set speed to 0;
+      RDLR = (RDLR | 0x000000FF);
       //RDLR = ((RDLR & 0xFF00) | cs); // Replace the checksum
       WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
       WORD_TO_BYTE_ARRAY(&to_send.data[0],RDLR);
