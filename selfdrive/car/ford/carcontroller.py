@@ -1,10 +1,7 @@
-import math
-from common.numpy_fast import interp, clip
-from selfdrive.car.ford.fordcan import spam_cancel_button, ParkAid_Data, EngVehicleSpThrottle2, BrakeSysFeatures
+from selfdrive.car.ford.fordcan import spam_cancel_button, ParkAid_Data
 from selfdrive.car.ford.values import CarControllerParams
 from selfdrive.car import apply_std_steer_angle_limits
 from opendbc.can.packer import CANPacker
-from selfdrive.config import Conversions as CV
 
 class CarController():
   def __init__(self, dbc_name, CP, VM):
