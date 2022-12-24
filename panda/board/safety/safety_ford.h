@@ -89,8 +89,8 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       to_send.bus = bus_num;
       to_send.addr = addr;
       to_send.data_len_code = to_fwd->data_len_code;
-      uint8_t cnt = (GET_BYTE(to_fwd, 2) & 0x1C) >> 2; // Get counter value
-      uint8_t cs = ford_checksum(cnt); // Calculate checksum
+      //uint8_t cnt = (GET_BYTE(to_fwd, 2) & 0x1C) >> 2; // Get counter value
+      //uint8_t cs = ford_checksum(cnt); // Calculate checksum
       uint32_t RDLR = GET_BYTES_04(to_fwd); // Get first 4 bytes
       uint32_t RDHR = GET_BYTES_48(to_fwd); // Get second 4 bytes
       RDLR = (RDLR & 0xFFFF); // Set speed to 0;
@@ -107,8 +107,8 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       to_send.bus = bus_num;
       to_send.addr = addr;
       to_send.data_len_code = to_fwd->data_len_code;
-      uint8_t cnt = ((GET_BYTE(to_fwd, 2) & 0x78) >> 3); // Get counter value
-      uint8_t cs = ford_checksum(cnt); // Calculate checksum
+      //uint8_t cnt = ((GET_BYTE(to_fwd, 2) & 0x78) >> 3); // Get counter value
+      //uint8_t cs = ford_checksum(cnt); // Calculate checksum
       uint32_t RDLR = GET_BYTES_04(to_fwd); // Get first 4 bytes
       uint32_t RDHR = GET_BYTES_48(to_fwd); // Get second 4 bytes
       RDHR = (RDHR & 0xFFFF0000); // Set speed to 0;
