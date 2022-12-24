@@ -1,3 +1,5 @@
+void can_send(CANPacket_t *to_push, uint8_t bus_number, bool skip_tx_hook);
+
 const struct lookup_t FORD_LOOKUP_ANGLE_RATE_UP = {
     {2., 7., 17.},
     {7.5, 1.2, .225}};
@@ -70,8 +72,27 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
   int bus_fwd = -1;
   int addr = GET_ADDR(to_fwd);	
   if(!relay_malfunction) {
+    // Modify BrakeSysFeatures speed messages when controls are allowed
+    if ((bus_num == 0) && (addr == 0x415) && controls_allowed) {
+      CANPacket_t to_send;
+      to_send.returned = 0U;
+      to_send.rejected = 0U;
+      to_send.extended = to_fwd->extended;
+      to_send.bus = bus_num;
+      to_send.addr = addr;
+      to_send.data_len_code = to_fwd->data_len_code;
+      uint32_t cnt = (GET_BYTE(to_fwd, 2) & 0x1C) >> 2; // Get counter value
+      uint32_t cs = 255 - cnt - 3; // Calculate checksum
+      uint32_t RDLR = GET_BYTES_04(to_fwd); // Get first 4 bytes
+      uint32_t RDHR = GET_BYTES_48(to_fwd); // Get second 4 bytes
+      RDLR = RDLR & 0xFFFF; // Set speed to 0;
+      RDLR = (RDLR & 0xC300) | (cnt << 10); // Replace the counter
+      // TO BE CONTINUED
+    }
+    // Block APA messages from reaching the PSCM
     if((bus_num == 0) && (addr != 0x202) && (addr != 0x3A8) && (addr != 0x415)) {
       bus_fwd = 2;
+    // Allow everything from PSCM to reach the truck
     } else if(bus_num == 2) {
       bus_fwd = 0;
     }
