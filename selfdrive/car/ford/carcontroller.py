@@ -20,17 +20,10 @@ class CarController():
       can_sends.append(spam_cancel_button(self.packer))
 
     if (frame % CarControllerParams.APA_STEP) == 0:
-      if enabled:
-        apply_speed = 0
-        if c.active and CS.sappControlState == 2:
-          apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
-        else:
-          apply_angle = CS.out.steeringAngleDeg
+      if c.active and CS.sappControlState == 2:
+        apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
       else:
-        apply_speed = CS.vSpeed
-          
-      #can_sends.append(BrakeSysFeatures(self.packer, frame, apply_speed))
-      #can_sends.append(EngVehicleSpThrottle2(self.packer, frame, apply_speed, CS.out.gearShifter))
+        apply_angle = CS.out.steeringAngleDeg
       can_sends.append(ParkAid_Data(self.packer, c.active, apply_angle, CS.sappControlState))
     
     self.apply_angle_last = apply_angle
