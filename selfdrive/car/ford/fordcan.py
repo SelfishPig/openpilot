@@ -9,7 +9,7 @@ def ParkAid_Data(packer, active, apply_steer, sappControlState):
   if sappControlState == 1 and active:
     apaOn = 2
     apaReq = 0
-  else if sappControlState == 2 and active:
+  elif sappControlState == 2 and active:
     apaOn = 2
     apaReq = 1
   else:
