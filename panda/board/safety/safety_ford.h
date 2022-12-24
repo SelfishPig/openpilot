@@ -10,13 +10,10 @@ const struct lookup_t FORD_LOOKUP_ANGLE_RATE_DOWN = {
 
 const int FORD_DEG_TO_CAN = 10;
 
-//static uint8_t ford_checksum(uint8_t cnt) {
-//  uint8_t cs = (255 - cnt - 3);
-  //if (cs < 0) {
-  //    cs = cs + 255;
-  //}
-//  return cs;
-//}
+static uint8_t ford_checksum(uint8_t cnt) {
+  uint8_t cs = (255 - cnt - 3);
+  return cs;
+}
 
 static int ford_rx_hook(CANPacket_t *to_push) {
   int bus = GET_BUS(to_push);
@@ -89,15 +86,14 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       to_send.bus = bus_num;
       to_send.addr = addr;
       to_send.data_len_code = to_fwd->data_len_code;
-      //uint8_t cnt = (GET_BYTE(to_fwd, 2) & 0x1C) >> 2; // Get counter value
-      //uint8_t cs = ford_checksum(cnt); // Calculate checksum
+      uint8_t cnt = (GET_BYTE(to_fwd, 2) & 0x1C) >> 2; // Get counter value
+      uint8_t cs = ford_checksum(cnt); // Calculate checksum
       uint32_t RDLR = GET_BYTES_04(to_fwd); // Get first 4 bytes
       uint32_t RDHR = GET_BYTES_48(to_fwd); // Get second 4 bytes
-      RDLR = (RDLR & 0x0000FFFF); // Set speed to 0;
-      RDHR = (RDHR & 0xFFFF0000); // test
-      //RDLR = ((RDLR & 0xFF) | cs); // Replace the checksum
+      RDLR = (RDLR & 0x00FF0000); // Set speed to 0
       WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
       WORD_TO_BYTE_ARRAY(&to_send.data[0],RDLR);
+      &to_send.data[0] = cs; // Replace the checksum
       can_send(&to_send, 2, true);
     // Modify EngVehicleSpThrottle2 speed messages when controls are allowed
     } else if ((bus_num == 0) && (addr == 0x202) && !controls_allowed) {
@@ -108,15 +104,14 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       to_send.bus = bus_num;
       to_send.addr = addr;
       to_send.data_len_code = to_fwd->data_len_code;
-      //uint8_t cnt = ((GET_BYTE(to_fwd, 2) & 0x78) >> 3); // Get counter value
-      //uint8_t cs = ford_checksum(cnt); // Calculate checksum
+      uint8_t cnt = ((GET_BYTE(to_fwd, 2) & 0x78) >> 3); // Get counter value
+      uint8_t cs = ford_checksum(cnt); // Calculate checksum
       uint32_t RDLR = GET_BYTES_04(to_fwd); // Get first 4 bytes
       uint32_t RDHR = GET_BYTES_48(to_fwd); // Get second 4 bytes
-      RDHR = (RDHR & 0xFF0000FF); // Set speed to 0;
-      RDLR = (RDLR | 0x000000FF);
-      //RDLR = ((RDLR & 0xFF00) | cs); // Replace the checksum
+      RDHR = (RDHR & 0x0000FFFF); // Set speed to 0
       WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
       WORD_TO_BYTE_ARRAY(&to_send.data[0],RDLR);
+      &to_send.data[2] = cs; // Replace the checksum
       can_send(&to_send, 2, true);
     // Block APA messages from reaching the PSCM.
     } else if ((bus_num == 0) && (addr != 0x3A8)) {
