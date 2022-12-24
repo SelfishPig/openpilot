@@ -117,11 +117,12 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       to_send.data[6] = 0x00; // Set speed line 1 to 0
       to_send.data[7] = 0x00; // Set speed line 2 to 0
       can_send(&to_send, 2, true);
-    // Block APA messages from the IPMA reaching the PSCM.
-    } else if ((bus_num == 0) && (addr != 0x3A8)) {
+    // Forward everything else from car to PSCM except APA messages from IPMA
+    //} else if ((bus_num == 0) && (addr != 0x3A8)) {
+    } else if (bus_num == 0) {
       bus_fwd = 2;
     // Allow everything from PSCM to reach the rest of the truck.
-    } else if(bus_num == 2) {
+    } else if (bus_num == 2) {
       bus_fwd = 0;
     }
   }	

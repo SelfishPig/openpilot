@@ -21,7 +21,7 @@ class CarController():
         apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
       else:
         apply_angle = CS.out.steeringAngleDeg
-      can_sends.append(ParkAid_Data(self.packer, c.active, apply_angle, CS.sappControlState))
+      #can_sends.append(ParkAid_Data(self.packer, c.active, apply_angle, CS.sappControlState))
     
     self.apply_angle_last = apply_angle
     
