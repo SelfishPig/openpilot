@@ -81,7 +81,7 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
   int addr = GET_ADDR(to_fwd);	
   if(!relay_malfunction) {
     // Modify BrakeSysFeatures speed messages when controls are allowed
-    if ((bus_num == 0) && (addr == 0x415) && controls_allowed) {
+    if ((bus_num == 0) && (addr == 0x415) && !controls_allowed) {
       CANPacket_t to_send;
       to_send.returned = 0U;
       to_send.rejected = 0U;
@@ -99,7 +99,7 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       WORD_TO_BYTE_ARRAY(&to_send.data[0],RDLR);
       can_send(&to_send, 2, true);
     // Modify EngVehicleSpThrottle2 speed messages when controls are allowed
-    } else if ((bus_num == 0) && (addr == 0x202) && controls_allowed) {
+    } else if ((bus_num == 0) && (addr == 0x202) && !controls_allowed) {
       CANPacket_t to_send;
       to_send.returned = 0U;
       to_send.rejected = 0U;
