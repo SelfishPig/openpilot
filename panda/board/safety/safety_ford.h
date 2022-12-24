@@ -93,7 +93,7 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       RDLR = (RDLR & 0x00FF0000); // Set speed to 0
       WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
       WORD_TO_BYTE_ARRAY(&to_send.data[0],RDLR);
-      &to_send.data[0] = cs; // Replace the checksum
+      to_send.data[0] = cs; // Replace the checksum
       can_send(&to_send, 2, true);
     // Modify EngVehicleSpThrottle2 speed messages when controls are allowed
     } else if ((bus_num == 0) && (addr == 0x202) && !controls_allowed) {
@@ -111,7 +111,7 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       RDHR = (RDHR & 0x0000FFFF); // Set speed to 0
       WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
       WORD_TO_BYTE_ARRAY(&to_send.data[0],RDLR);
-      &to_send.data[2] = cs; // Replace the checksum
+      to_send.data[2] = cs; // Replace the checksum
       can_send(&to_send, 2, true);
     // Block APA messages from reaching the PSCM.
     } else if ((bus_num == 0) && (addr != 0x3A8)) {
