@@ -1,10 +1,3 @@
-import math
-from common.numpy_fast import clip
-from selfdrive.config import Conversions as CV
-from cereal import car
-
-GearShifter = car.CarState.GearShifter
-
 def spam_cancel_button(packer):
   values = {
     "Cancel": 1
