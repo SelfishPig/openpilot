@@ -86,14 +86,16 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       to_send.bus = bus_num;
       to_send.addr = addr;
       to_send.data_len_code = to_fwd->data_len_code;
-      uint8_t cnt = (GET_BYTE(to_fwd, 2) & 0x1C) >> 2; // Get counter value
-      uint8_t cs = ford_checksum(cnt); // Calculate checksum
-      uint32_t RDLR = GET_BYTES_04(to_fwd); // Get first 4 bytes
-      uint32_t RDHR = GET_BYTES_48(to_fwd); // Get second 4 bytes
-      RDLR = RDLR & 0xFFFF0000; // Set speed to 0
-      RDLR = (RDLR & 0x00FFFFFF) | (cs << 24); // Set checksum
-      WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
-      WORD_TO_BYTE_ARRAY(&to_send.data[0],RDLR);
+      uint8_t cnt = (GET_BYTE(to_fwd, 2) & 0x3C) >> 2; // Get counter value
+      uint8_t cs = ford_checksum(cnt); // Calculate checksum based on 0 speed
+      to_send.data[0] = 0x00; // Set speed line 1 to 0
+      to_send.data[0] = 0x00; // Set speed line 2 to 0
+      to_send.data[2] = GET_BYTE(to_fwd, 2);
+      to_send.data[3] = cs; // Set checksum
+      to_send.data[4] = GET_BYTE(to_fwd, 4);
+      to_send.data[5] = GET_BYTE(to_fwd, 5);
+      to_send.data[6] = GET_BYTE(to_fwd, 6);
+      to_send.data[7] = GET_BYTE(to_fwd, 7);
       can_send(&to_send, 2, true);
     // Modify EngVehicleSpThrottle2 speed messages when controls are allowed
     } else if ((bus_num == 0) && (addr == 0x202) && !controls_allowed) {
@@ -106,13 +108,14 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       to_send.data_len_code = to_fwd->data_len_code;
       uint8_t cnt = ((GET_BYTE(to_fwd, 2) & 0x78) >> 3); // Get counter value
       uint8_t cs = ford_checksum(cnt); // Calculate checksum
-      uint32_t RDLR = GET_BYTES_04(to_fwd); // Get first 4 bytes
-      uint32_t RDHR = GET_BYTES_48(to_fwd); // Get second 4 bytes
-      RDHR = (RDHR & 0xFFFF); // Set speed to 0
-      RDLR = (RDLR & 0xFFFF00FF) | (cs << 8); // Set checksum
-      WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
-      WORD_TO_BYTE_ARRAY(&to_send.data[0],RDLR);
-      to_send.data[2] = cs; // Replace the checksum
+      to_send.data[0] = GET_BYTE(to_fwd, 0);
+      to_send.data[1] = cs; // Set checksum
+      to_send.data[2] = GET_BYTE(to_fwd, 2);
+      to_send.data[3] = GET_BYTE(to_fwd, 3);
+      to_send.data[4] = GET_BYTE(to_fwd, 4);
+      to_send.data[5] = GET_BYTE(to_fwd, 5);
+      to_send.data[6] = 0x00; // Set speed line 1 to 0
+      to_send.data[7] = 0x00; // Set speed line 2 to 0
       can_send(&to_send, 2, true);
     // Block APA messages from reaching the PSCM.
     } else if ((bus_num == 0) && (addr != 0x3A8)) {
