@@ -13,8 +13,8 @@ class CarController():
 
     apply_angle = self.apply_angle_last
     
-    #if cruise_cancel:
-    #  can_sends.append(spam_cancel_button(self.packer))
+    if cruise_cancel:
+      can_sends.append(spam_cancel_button(self.packer))
 
     if (frame % CarControllerParams.APA_STEP) == 0:
       if c.active and CS.sappControlState == 2:
