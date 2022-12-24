@@ -24,7 +24,7 @@ static int ford_rx_hook(CANPacket_t *to_push) {
     }
     if(addr == 0x165) {
       int cruise_state = (GET_BYTE(to_push, 1) & 0x7);
-      bool cruise_engaged = (cruise_state != 0) && (cruise_state != 3);
+      bool cruise_engaged = (cruise_state == 5);
       if(cruise_engaged && !cruise_engaged_prev) {
         controls_allowed = 1;
       }
@@ -78,7 +78,7 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
   int addr = GET_ADDR(to_fwd);	
   if(!relay_malfunction) {
     // Modify BrakeSysFeatures speed messages when controls are allowed
-    if ((bus_num == 0) && (addr == 0x415) && !controls_allowed) {
+    if ((bus_num == 0) && (addr == 0x415) && controls_allowed) {
       CANPacket_t to_send;
       to_send.returned = 0U;
       to_send.rejected = 0U;
@@ -98,7 +98,7 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       to_send.data[7] = GET_BYTE(to_fwd, 7);
       can_send(&to_send, 2, true);
     // Modify EngVehicleSpThrottle2 speed messages when controls are allowed
-    } else if ((bus_num == 0) && (addr == 0x202) && !controls_allowed) {
+    } else if ((bus_num == 0) && (addr == 0x202) && controls_allowed) {
       CANPacket_t to_send;
       to_send.returned = 0U;
       to_send.rejected = 0U;
@@ -117,7 +117,7 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       to_send.data[6] = 0x00; // Set speed line 1 to 0
       to_send.data[7] = 0x00; // Set speed line 2 to 0
       can_send(&to_send, 2, true);
-    // Block APA messages from reaching the PSCM.
+    // Block APA messages from the IPMA reaching the PSCM.
     } else if ((bus_num == 0) && (addr != 0x3A8)) {
       bus_fwd = 2;
     // Allow everything from PSCM to reach the rest of the truck.
