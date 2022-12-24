@@ -10,13 +10,13 @@ const struct lookup_t FORD_LOOKUP_ANGLE_RATE_DOWN = {
 
 const int FORD_DEG_TO_CAN = 10;
 
-static uint8_t ford_checksum(uint8_t cnt) {
-  uint8_t cs = (255 - cnt - 3);
+//static uint8_t ford_checksum(uint8_t cnt) {
+//  uint8_t cs = (255 - cnt - 3);
   //if (cs < 0) {
   //    cs = cs + 255;
   //}
-  return cs;
-}
+//  return cs;
+//}
 
 static int ford_rx_hook(CANPacket_t *to_push) {
   int bus = GET_BUS(to_push);
