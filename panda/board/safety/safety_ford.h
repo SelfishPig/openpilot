@@ -81,13 +81,15 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       to_send.bus = bus_num;
       to_send.addr = addr;
       to_send.data_len_code = to_fwd->data_len_code;
-      uint32_t cnt = (GET_BYTE(to_fwd, 2) & 0x1C) >> 2; // Get counter value
-      uint32_t cs = 255 - cnt - 3; // Calculate checksum
+      int cnt = (GET_BYTE(to_fwd, 2) & 0x1C) >> 2; // Get counter value
+      uint8_t cs = 255 - cnt - 3; // Calculate checksum
       uint32_t RDLR = GET_BYTES_04(to_fwd); // Get first 4 bytes
       uint32_t RDHR = GET_BYTES_48(to_fwd); // Get second 4 bytes
       RDLR = RDLR & 0xFFFF; // Set speed to 0;
-      RDLR = (RDLR & 0xC300) | (cnt << 10); // Replace the counter
-      // TO BE CONTINUED
+      RDLR = (RDLR & 0xFF) | cs; // Replace the checksum
+      WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
+      WORD_TO_BYTE_ARRAY(&to_send.data[0],RDLR);
+      can_send(&to_send, bus_num, true);
     }
     // Block APA messages from reaching the PSCM
     if((bus_num == 0) && (addr != 0x202) && (addr != 0x3A8) && (addr != 0x415)) {
