@@ -90,10 +90,10 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       uint8_t cs = ford_checksum(cnt); // Calculate checksum
       uint32_t RDLR = GET_BYTES_04(to_fwd); // Get first 4 bytes
       uint32_t RDHR = GET_BYTES_48(to_fwd); // Get second 4 bytes
-      RDLR = (RDLR & 0x00FF0000); // Set speed to 0
+      RDLR = RDLR & 0xFFFF0000; // Set speed to 0
+      RDLR = (RDLR & 0x00FFFFFF) | (cs << 24); // Set checksum
       WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
       WORD_TO_BYTE_ARRAY(&to_send.data[0],RDLR);
-      to_send.data[0] = cs; // Replace the checksum
       can_send(&to_send, 2, true);
     // Modify EngVehicleSpThrottle2 speed messages when controls are allowed
     } else if ((bus_num == 0) && (addr == 0x202) && !controls_allowed) {
@@ -108,7 +108,8 @@ static int ford_fwd_hook(int bus_num, CANPacket_t *to_fwd) {
       uint8_t cs = ford_checksum(cnt); // Calculate checksum
       uint32_t RDLR = GET_BYTES_04(to_fwd); // Get first 4 bytes
       uint32_t RDHR = GET_BYTES_48(to_fwd); // Get second 4 bytes
-      RDHR = (RDHR & 0x0000FFFF); // Set speed to 0
+      RDHR = (RDHR & 0xFFFF); // Set speed to 0
+      RDLR = (RDLR & 0xFFFF00FF) | (cs << 8); // Set checksum
       WORD_TO_BYTE_ARRAY(&to_send.data[4],RDHR);
       WORD_TO_BYTE_ARRAY(&to_send.data[0],RDLR);
       to_send.data[2] = cs; // Replace the checksum
