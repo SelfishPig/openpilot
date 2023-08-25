@@ -14,7 +14,7 @@ class CarInterface(CarInterfaceBase):
     ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.ford)]
     ret.dashcamOnly = False
     ret.steerControlType = car.CarParams.SteerControlType.angle
-    ret.openpilotLongitudinalControl = True
+    ret.openpilotLongitudinalControl = False
     ret.steerRateCost = 1.0
     ret.steerActuatorDelay = 0.1
     ret.mass = 4770. * CV.LB_TO_KG + STD_CARGO_KG
