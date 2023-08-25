@@ -25,7 +25,7 @@ class CarState(CarStateBase):
     ret.gasPressed = cp.vl["EngVehicleSpThrottle"]['ApedPos_Pc_ActlArb'] / 100. > 1e-6
     ret.brakePressed = cp.vl["EngBrakeData"]['BpedDrvAppl_D_Actl'] == 2
     
-    ret.cruiseState.enabled = cp.vl["EngBrakeData"]['CcStat_D_Actl'] == 5
+    ret.cruiseState.enabled = cp.vl["EngBrakeData"]['CcStat_D_Actl'] in [4, 5]
     ret.cruiseState.available = cp.vl["EngBrakeData"]['CcStat_D_Actl'] != 0
     ret.cruiseState.speed = cp.vl["EngBrakeData"]['Veh_V_DsplyCcSet'] * CV.MPH_TO_MS
     
