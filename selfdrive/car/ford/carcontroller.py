@@ -16,6 +16,9 @@ class CarController():
     if cruise_cancel:
       can_sends.append(spam_cancel_button(self.packer))
 
+    if CS.acc_stopped:
+      can_sends.append(spam_resume_button(self.packer))
+
     if (frame % CarControllerParams.APA_STEP) == 0:
       if c.active and CS.sappControlState == 2:
         apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
