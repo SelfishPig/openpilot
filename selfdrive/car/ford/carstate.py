@@ -20,7 +20,7 @@ class CarState(CarStateBase):
     
     ret.vEgoRaw = self.vSpeed * CV.KPH_TO_MS
     ret.vEgo, ret.aEgo = self.update_speed_kf(ret.vEgoRaw)
-    ret.standstill = cp.vl["DesiredTorqBrk"]['VehStop_D_Stat'] == 1
+    ret.standstill = ret.vEgo < 0.01
  
     ret.gasPressed = cp.vl["EngVehicleSpThrottle"]['ApedPos_Pc_ActlArb'] / 100. > 1e-6
     ret.brakePressed = cp.vl["EngBrakeData"]['BpedDrvAppl_D_Actl'] == 2
@@ -28,13 +28,14 @@ class CarState(CarStateBase):
     ret.cruiseState.enabled = cp.vl["EngBrakeData"]['CcStat_D_Actl'] in [4, 5]
     ret.cruiseState.available = cp.vl["EngBrakeData"]['CcStat_D_Actl'] != 0
     ret.cruiseState.speed = cp.vl["EngBrakeData"]['Veh_V_DsplyCcSet'] * CV.MPH_TO_MS
+    self.acc_stopped = cp.vl["ACCDATA_3"]['AccStopMde_B_Dsply'] == 1
     
     ret.steeringAngleDeg = cp.vl["BrakeSnData_5"]['SteWhlRelInit_An_Sns']
     ret.steeringTorque = cp_cam.vl["EPAS_INFO"]['SteeringColumnTorque']
     ret.steeringPressed = True
     ret.steerWarning = cp_cam.vl["EPAS_INFO"]['SteMdule_D_Stat'] not in [0, 2]
     ret.steerError = False
-
+    
     gear = cp.vl["TransGearData"]['GearLvrPos_D_Actl']
     if gear == 0:
       ret.gearShifter = GearShifter.park
@@ -73,7 +74,7 @@ class CarState(CarStateBase):
       ("Left_Turn_Light", "Steering_Buttons", 0.),
       ("Right_Turn_Light", "Steering_Buttons", 0.),
       ("FirstRowBuckleDriver", "RCMStatusMessage2_FD1", 0.),
-      ("VehStop_D_Stat", "DesiredTorqBrk", 0.),
+      ("AccStopMde_B_Dsply", "ACCDATA_3", 0.),
     ]
     checks = []
     return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, 0, enforce_checks=False)
