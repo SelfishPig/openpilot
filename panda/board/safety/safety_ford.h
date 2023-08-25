@@ -24,7 +24,7 @@ static int ford_rx_hook(CANPacket_t *to_push) {
     }
     if(addr == 0x165) {
       int cruise_state = (GET_BYTE(to_push, 1) & 0x7);
-      bool cruise_engaged = (cruise_state == 5);
+      bool cruise_engaged = ((cruise_state == 4) || (cruise_state == 5));
       if(cruise_engaged && !cruise_engaged_prev) {
         controls_allowed = 1;
       }
