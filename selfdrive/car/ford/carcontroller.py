@@ -25,7 +25,7 @@ class CarController():
       else:
         apply_angle = CS.out.steeringAngleDeg
         
-      can_sends.append(ParkAid_Data(self.packer, c.active, apply_angle, CS.sappControlState))
+      can_sends.append(ParkAid_Data(self.packer, c.active and not CS.out.standstill, apply_angle, CS.sappControlState))
     
     self.apply_angle_last = apply_angle
     
