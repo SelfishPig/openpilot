@@ -5,7 +5,6 @@ from selfdrive.car.ford.values import CAR
 from selfdrive.car import STD_CARGO_KG, scale_rot_inertia, scale_tire_stiffness, gen_empty_fingerprint, get_safety_config
 from selfdrive.car.interfaces import CarInterfaceBase
 
-
 class CarInterface(CarInterfaceBase):
   @staticmethod
   def get_params(candidate, fingerprint=gen_empty_fingerprint(), car_fw=[]):
@@ -15,7 +14,7 @@ class CarInterface(CarInterfaceBase):
     ret.dashcamOnly = False
     ret.steerControlType = car.CarParams.SteerControlType.angle
     ret.openpilotLongitudinalControl = False
-    ret.steerRateCost = 1.0
+    ret.steerRateCost = 1.3
     ret.steerActuatorDelay = 0.1
     ret.mass = 4770. * CV.LB_TO_KG + STD_CARGO_KG
     ret.steerRatio = 17
@@ -23,7 +22,6 @@ class CarInterface(CarInterfaceBase):
     ret.centerToFront = ret.wheelbase * 0.44
     ret.rotationalInertia = scale_rot_inertia(ret.mass, ret.wheelbase)
     ret.tireStiffnessFront, ret.tireStiffnessRear = scale_tire_stiffness(ret.mass, ret.wheelbase, ret.centerToFront)
-
     return ret
 
   def update(self, c, can_strings):
