@@ -6,8 +6,8 @@ class CarControllerParams:
   APA_STEP = 2 # 50hz
 
   # These rate limits are also enforced by the Panda safety code.
-  ANGLE_RATE_LIMIT_UP = AngleRateLimit(speed_bp=[0., 5., 15., 30], angle_v=[7.5, .9, .45, .1])
-  ANGLE_RATE_LIMIT_DOWN = AngleRateLimit(speed_bp=[0., 5., 15., 30], angle_v=[7.5, 1.8, .9, .2])
+  ANGLE_RATE_LIMIT_UP = AngleRateLimit(speed_bp=[0.0, 30.0], angle_v=[7.5, 0.1])
+  ANGLE_RATE_LIMIT_DOWN = AngleRateLimit(speed_bp=[0.0, 30.0], angle_v=[7.5, 0.2])
 
 class CAR:
   F150 = "F150"
