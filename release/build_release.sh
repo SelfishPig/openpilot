@@ -29,7 +29,7 @@ rm -rf $BUILD_DIR
 mkdir -p $BUILD_DIR
 cd $BUILD_DIR
 git init
-git remote add origin git@github.com:commaai/openpilot.git
+git remote add origin git@github.com:selfishpig/openpilot.git
 git fetch origin $RELEASE_BRANCH
 git checkout --orphan $RELEASE_BRANCH
 
@@ -108,11 +108,6 @@ rm -rf $TEST_FILES
 if [ ! -z "$PUSH" ]; then
   echo "[-] pushing T=$SECONDS"
   git push -f origin $RELEASE_BRANCH
-
-  # Create dashcam
-  git rm selfdrive/car/*/carcontroller.py
-  git commit -m "create dashcam release from release"
-  git push -f origin $RELEASE_BRANCH:$DASHCAM_BRANCH
 fi
 
 echo "[-] done T=$SECONDS"
