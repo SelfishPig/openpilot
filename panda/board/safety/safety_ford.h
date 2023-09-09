@@ -1,12 +1,12 @@
 void can_send(CANPacket_t *to_push, uint8_t bus_number, bool skip_tx_hook);
 
 const struct lookup_t FORD_LOOKUP_ANGLE_RATE_UP = {
-    {2., 7., 17.},
-    {7.5, 1.2, .225}};
+    {2.0, 17.0, 32.0},
+    {7.5, 0.5, 0.05}};
 
 const struct lookup_t FORD_LOOKUP_ANGLE_RATE_DOWN = {
-    {2., 7., 17.},
-    {7.5, 5.25, .6}};
+    {2.0, 17.0, 32.0},
+    {7.5, 1.0, 0.1}};
 
 const int FORD_DEG_TO_CAN = 10;
 
