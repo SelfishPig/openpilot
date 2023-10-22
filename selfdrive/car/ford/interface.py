@@ -15,7 +15,7 @@ class CarInterface(CarInterfaceBase):
     ret.steerControlType = car.CarParams.SteerControlType.angle
     ret.openpilotLongitudinalControl = False
     ret.steerRateCost = 1.0
-    ret.steerActuatorDelay = 0.4
+    ret.steerActuatorDelay = 0.2
     ret.mass = 4770. * CV.LB_TO_KG + STD_CARGO_KG
     ret.steerRatio = 17
     ret.wheelbase = 3.68
