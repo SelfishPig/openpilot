@@ -1,5 +1,5 @@
 from selfdrive.car.ford.fordcan import spam_cancel_button, spam_resume_button, ParkAid_Data
-from selfdrive.car.ford.values import CarControllerParams
+from selfdrive.car.ford.values import CarControllerParams, PingPongLimits
 from selfdrive.car import apply_std_steer_angle_limits
 from opendbc.can.packer import CANPacker
 
@@ -21,7 +21,10 @@ class CarController():
 
     if (frame % CarControllerParams.APA_STEP) == 0:
       if c.active and CS.sappControlState == 2:
-        apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
+        if actuators.steeringAngleDeg > -5 and actuators.steeringAngleDeg < 5:
+          apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg, self.apply_angle_last, CS.out.vEgo, PingPongLimits)
+        else:
+          apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
       else:
         apply_angle = CS.out.steeringAngleDeg
         

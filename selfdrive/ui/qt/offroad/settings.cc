@@ -36,6 +36,12 @@ TogglesPanel::TogglesPanel(SettingsWindow *parent) : ListWidget(parent) {
       "../assets/offroad/icon_openpilot.png",
     },
     {
+      "IsSRLearnerEnabled",
+      "Enable Steer Ratio Learner",
+      "Allow openpilot to automatically learn the vehicle's steer ratio.",
+      "../assets/offroad/icon_warning.png",
+    },
+    {
       "IsLdwEnabled",
       "Enable Lane Departure Warnings",
       "Receive alerts to steer back into the lane when your vehicle drifts over a detected lane line without a turn signal activated while driving over 31 mph (50 km/h).",
