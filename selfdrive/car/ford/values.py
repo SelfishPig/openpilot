@@ -11,7 +11,7 @@ class CarControllerParams:
 
 class PingPongLimits:
   ANGLE_RATE_LIMIT_UP = AngleRateLimit(speed_bp=[0.0, 15.0, 30.0], angle_v=[7.5, 0.25, 0.025])
-  ANGLE_RATE_LIMIT_DOWN = AngleRateLimit(speed_bp=[0.0, 15.0, 30.0], angle_v=[7.5, 0.5, 0.05])
+  ANGLE_RATE_LIMIT_DOWN = AngleRateLimit(speed_bp=[0.0, 15.0, 30.0], angle_v=[7.5, 0.25, 0.025])
 
 class CAR:
   F150 = "F150"
