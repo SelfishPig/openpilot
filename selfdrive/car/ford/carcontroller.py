@@ -21,7 +21,7 @@ class CarController():
 
     if (frame % CarControllerParams.APA_STEP) == 0:
       if c.active and CS.sappControlState == 2:
-        if abs(self.apply_angle_last - actuators.steeringAngleDeg) <= 4:
+        if abs(self.apply_angle_last - actuators.steeringAngleDeg) <= 5:
           apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg, self.apply_angle_last, CS.out.vEgo, PingPongLimits)
         else:
           apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
