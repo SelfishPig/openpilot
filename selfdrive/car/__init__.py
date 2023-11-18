@@ -89,7 +89,12 @@ def apply_toyota_steer_torque_limits(apply_torque, apply_torque_last, motor_torq
 def apply_std_steer_angle_limits(apply_angle, apply_angle_last, v_ego, LIMITS):
   steer_up = apply_angle_last * apply_angle > 0. and abs(apply_angle) > abs(apply_angle_last)
   rate_limits = LIMITS.ANGLE_RATE_LIMIT_UP if steer_up else LIMITS.ANGLE_RATE_LIMIT_DOWN
-  angle_rate_lim = interp(v_ego, rate_limits.speed_bp, rate_limits.angle_v)
+  angle_delta = abs(apply_angle_last - apply_angle)
+  if angle_delta <= LIMITS.SMOOTH_DELTA:
+    smooth_factor = interp(angle_delta, [LIMITS.SMOOTH_DELTA, 0], [1, LIMITS.SMOOTH_FACTOR])
+  else:
+    smooth_factor = 1
+  angle_rate_lim = interp(v_ego, rate_limits.speed_bp, rate_limits.angle_v) * smooth_factor
   return clip(apply_angle, apply_angle_last - angle_rate_lim, apply_angle_last + angle_rate_lim)
 
 def crc8_pedal(data):
