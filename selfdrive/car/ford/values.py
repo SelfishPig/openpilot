@@ -10,7 +10,7 @@ class CarControllerParams:
   ANGLE_RATE_LIMIT_DOWN = AngleRateLimit(speed_bp=[0.0, 15.0, 30.0], angle_v=[7.5, 2.0, 0.2])
 
   # Overshoot fix
-  SMOOTH_DELTA = 5
+  SMOOTH_DELTA = 10
   SMOOTH_FACTOR = 0.05
 
 class CAR:
