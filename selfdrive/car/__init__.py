@@ -91,7 +91,7 @@ def apply_std_steer_angle_limits(apply_angle, apply_angle_last, v_ego, LIMITS):
   rate_limits = LIMITS.ANGLE_RATE_LIMIT_UP if steer_up else LIMITS.ANGLE_RATE_LIMIT_DOWN
   angle_delta = abs(apply_angle_last - apply_angle)
   if angle_delta <= LIMITS.SMOOTH_DELTA:
-    smooth_factor = interp(angle_delta, [LIMITS.SMOOTH_DELTA, 0], [1, LIMITS.SMOOTH_FACTOR])
+    smooth_factor = interp(angle_delta, [LIMITS.SMOOTH_DELTA, LIMITS.SMOOTH_DELTA / 2, 0], [1, LIMITS.SMOOTH_FACTOR * 2, LIMITS.SMOOTH_FACTOR])
   else:
     smooth_factor = 1
   angle_rate_lim = interp(v_ego, rate_limits.speed_bp, rate_limits.angle_v) * smooth_factor
