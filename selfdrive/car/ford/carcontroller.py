@@ -1,5 +1,5 @@
 from selfdrive.car.ford.fordcan import spam_cancel_button, spam_resume_button, ParkAid_Data
-from selfdrive.car.ford.values import CarControllerParams, PingPongLimits
+from selfdrive.car.ford.values import CarControllerParams
 from selfdrive.car import apply_std_steer_angle_limits
 from opendbc.can.packer import CANPacker
 
