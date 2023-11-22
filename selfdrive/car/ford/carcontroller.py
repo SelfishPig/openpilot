@@ -1,6 +1,7 @@
 from selfdrive.car.ford.fordcan import spam_cancel_button, spam_resume_button, ParkAid_Data
 from selfdrive.car.ford.values import CarControllerParams
 from selfdrive.car import apply_std_steer_angle_limits
+from common.numpy_fast import interp
 from opendbc.can.packer import CANPacker
 
 class CarController():
@@ -20,12 +21,15 @@ class CarController():
       can_sends.append(spam_resume_button(self.packer))
 
     if (frame % CarControllerParams.APA_STEP) == 0:
+      smooth_factor = 1
       if c.active and CS.sappControlState == 2:
+        angle_delta = abs(actuators.steeringAngleDeg - self.apply_angle_last)
+        if angle_delta <= CarControllerParams.SMOOTH_DELTA:
+          smooth_factor = interp(angle_delta, [CarControllerParams.SMOOTH_DELTA, 0], [1, CarControllerParams.SMOOTH_FACTOR])
         apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
       else:
         apply_angle = CS.out.steeringAngleDeg
-        
-      can_sends.append(ParkAid_Data(self.packer, c.active and not CS.out.standstill, apply_angle, CS.sappControlState))
+      can_sends.append(ParkAid_Data(self.packer, c.active and not CS.out.standstill, apply_angle * smooth_factor, CS.sappControlState))
     
     self.apply_angle_last = apply_angle
     
