@@ -25,11 +25,11 @@ class CarController():
       if c.active and CS.sappControlState == 2:
         angle_delta = abs(actuators.steeringAngleDeg - self.apply_angle_last)
         if angle_delta <= CarControllerParams.SMOOTH_DELTA:
-          smooth_factor = interp(angle_delta, [CarControllerParams.SMOOTH_DELTA, 0], [0.5, CarControllerParams.SMOOTH_FACTOR])
-        apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
+          smooth_factor = CarControllerParams.SMOOTH_FACTOR
+        apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg * smooth_factor, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
       else:
         apply_angle = CS.out.steeringAngleDeg
-      can_sends.append(ParkAid_Data(self.packer, c.active and not CS.out.standstill, apply_angle * smooth_factor, CS.sappControlState))
+      can_sends.append(ParkAid_Data(self.packer, c.active and not CS.out.standstill, apply_angle, CS.sappControlState))
     
     self.apply_angle_last = apply_angle
     
