@@ -25,7 +25,7 @@ class CarController():
       if c.active and CS.sappControlState == 2:
         angle_delta = abs(actuators.steeringAngleDeg - self.apply_angle_last)
         if angle_delta <= CarControllerParams.SMOOTH_DELTA:
-          smooth_factor = interp(angle_delta, [CarControllerParams.SMOOTH_DELTA, 0], [1, CarControllerParams.SMOOTH_FACTOR])
+          smooth_factor = interp(angle_delta, [CarControllerParams.SMOOTH_DELTA, 0], [0.5, CarControllerParams.SMOOTH_FACTOR])
         apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
       else:
         apply_angle = CS.out.steeringAngleDeg
