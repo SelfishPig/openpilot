@@ -11,7 +11,7 @@ class CarControllerParams:
 
   # Overshoot fix
   SMOOTH_DELTA = 5
-  SMOOTH_FACTOR = 0.5
+  SMOOTH_FACTOR = 0.6
 
 class CAR:
   F150 = "F150"
