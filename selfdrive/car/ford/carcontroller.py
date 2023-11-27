@@ -8,6 +8,7 @@ class CarController():
   def __init__(self, dbc_name, CP, VM):
     self.packer = CANPacker(dbc_name)
     self.apply_angle_last = 0
+    self.smooth_counter = 0
 
   def update(self, c, enabled, CS, frame, actuators, cruise_cancel):
     can_sends = []
@@ -21,14 +22,24 @@ class CarController():
       can_sends.append(spam_resume_button(self.packer))
 
     if (frame % CarControllerParams.APA_STEP) == 0:
-      smooth_factor = 1
       if c.active and CS.sappControlState == 2:
+        smooth_factor = 1
         angle_delta = abs(actuators.steeringAngleDeg - self.apply_angle_last)
-        if angle_delta <= CarControllerParams.SMOOTH_DELTA:
+
+        if angle_delta <= CarControllerParams.SMOOTH_DELTA and abs(actuators.steeringAngleDeg) <= CarControllerParams.SMOOTH_DELTA:
+          self.smooth_counter += 1
+        else:
+          self.smooth_counter = 0
+
+        if self.smooth_counter >= 150:
           smooth_factor = CarControllerParams.SMOOTH_FACTOR
+
         apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg * smooth_factor, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
+      
       else:
         apply_angle = CS.out.steeringAngleDeg
+        self.smooth_counter = 0
+
       can_sends.append(ParkAid_Data(self.packer, c.active and not CS.out.standstill, apply_angle, CS.sappControlState))
     
     self.apply_angle_last = apply_angle
