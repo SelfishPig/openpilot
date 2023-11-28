@@ -31,7 +31,7 @@ class CarController():
         else:
           self.smooth_counter = 0
 
-        if self.smooth_counter >= 150:
+        if self.smooth_counter >= (CarControllerParams.SMOOTH_SECONDS * 50):
           smooth_factor = CarControllerParams.SMOOTH_FACTOR
 
         apply_angle = apply_std_steer_angle_limits(actuators.steeringAngleDeg * smooth_factor, self.apply_angle_last, CS.out.vEgo, CarControllerParams)
