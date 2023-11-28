@@ -26,7 +26,7 @@ class CarController():
         smooth_factor = 1
         angle_delta = abs(actuators.steeringAngleDeg - self.apply_angle_last)
 
-        if angle_delta <= CarControllerParams.SMOOTH_DELTA and abs(actuators.steeringAngleDeg) <= CarControllerParams.SMOOTH_DELTA:
+        if angle_delta <= CarControllerParams.SMOOTH_DELTA:
           self.smooth_counter += 1
         else:
           self.smooth_counter = 0
