@@ -21,7 +21,6 @@ TOTAL_SCONS_NODES = 2405
 MAX_BUILD_PROGRESS = 100
 PREBUILT = os.path.exists(os.path.join(BASEDIR, 'prebuilt'))
 
-
 def build(spinner: Spinner, dirty: bool = False) -> None:
   env = os.environ.copy()
   env['SCONS_PROGRESS'] = "1"
