@@ -1,3 +1,2 @@
-Update (11/28/2023):
-- Reduced ping ponging on straight roads
-- Added toggle for steerRatio learner
+Update (12/01/2023):
+- Added "Ping Pong Fix" toggle
