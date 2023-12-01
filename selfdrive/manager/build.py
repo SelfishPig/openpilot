@@ -82,7 +82,6 @@ def build(spinner: Spinner, dirty: bool = False) -> None:
             t.wait_for_exit()
         exit(1)
     else:
-      Path(os.path.join(BASEDIR, 'prebuilt')).touch()
       break
 
   # enforce max cache size
