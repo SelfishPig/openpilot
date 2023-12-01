@@ -10,9 +10,9 @@ class CarControllerParams:
   ANGLE_RATE_LIMIT_DOWN = AngleRateLimit(speed_bp=[0.0, 15.0, 30.0], angle_v=[7.5, 2.0, 0.2])
 
   # ping pong fix
-  SMOOTH_DELTA = 3
-  SMOOTH_FACTOR = 0.65
-  SMOOTH_SECONDS = 5
+  SMOOTH_DELTA = 4
+  SMOOTH_FACTOR = 0.5
+  SMOOTH_SECONDS = 3
 
 class CAR:
   F150 = "F150"
