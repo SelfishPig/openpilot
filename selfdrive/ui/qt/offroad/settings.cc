@@ -36,9 +36,9 @@ TogglesPanel::TogglesPanel(SettingsWindow *parent) : ListWidget(parent) {
       "../assets/offroad/icon_openpilot.png",
     },
     {
-      "IsSRLearnerEnabled",
-      "Enable Steer Ratio Learner",
-      "Allow openpilot to automatically learn the vehicle's steer ratio.",
+      "PingPongFix",
+      "Enable Ping Pong Fix",
+      "This will attempt to correct ping pong.",
       "../assets/offroad/icon_warning.png",
     },
     {

@@ -98,7 +98,7 @@ class Controls:
     # read params
     self.is_metric = params.get_bool("IsMetric")
     self.is_ldw_enabled = params.get_bool("IsLdwEnabled")
-    self.is_sr_learner_enabled = params.get_bool("IsSRLearnerEnabled")
+    self.ping_pong_fix = params.get_bool("PingPongFix")
     openpilot_enabled_toggle = params.get_bool("OpenpilotEnabledToggle")
     passive = params.get_bool("Passive") or not openpilot_enabled_toggle
 
@@ -471,10 +471,10 @@ class Controls:
     # Update VehicleModel
     params = self.sm['liveParameters']
     x = max(params.stiffnessFactor, 0.1)
-    if self.is_sr_learner_enabled:
-      sr = max(params.steerRatio, 0.1)
-    else:
+    if self.ping_pong_fix:
       sr = self.CP.steerRatio
+    else:
+      sr = max(params.steerRatio, 0.1)
     self.VM.update_params(x, sr)
 
     lat_plan = self.sm['lateralPlan']
