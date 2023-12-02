@@ -28,7 +28,8 @@ class CarState(CarStateBase):
     ret.cruiseState.enabled = cp.vl["EngBrakeData"]['CcStat_D_Actl'] in [4, 5]
     ret.cruiseState.available = cp.vl["EngBrakeData"]['CcStat_D_Actl'] != 0
     ret.cruiseState.speed = cp.vl["EngBrakeData"]['Veh_V_DsplyCcSet'] * CV.MPH_TO_MS
-    self.acc_stopped = cp.vl["ACCDATA_3"]['AccStopMde_B_Dsply'] == 1
+    #self.acc_stopped = cp.vl["ACCDATA_3"]['AccStopMde_B_Dsply'] == 1
+    self.acc_stopped = cp.vl["ACCDATA_3"]['AccStopRes_B_Dsply'] == 1
     
     ret.steeringAngleDeg = cp.vl["BrakeSnData_5"]['SteWhlRelInit_An_Sns']
     ret.steeringTorque = cp_cam.vl["EPAS_INFO"]['SteeringColumnTorque']
@@ -74,7 +75,8 @@ class CarState(CarStateBase):
       ("Left_Turn_Light", "Steering_Buttons", 0.),
       ("Right_Turn_Light", "Steering_Buttons", 0.),
       ("FirstRowBuckleDriver", "RCMStatusMessage2_FD1", 0.),
-      ("AccStopMde_B_Dsply", "ACCDATA_3", 0.),
+      #("AccStopMde_B_Dsply", "ACCDATA_3", 0.),
+      ("AccStopRes_B_Dsply", "ACCDATA_3", 0.),
       ("VehStop_D_Stat", "DesiredTorqBrk", 0.),
     ]
     checks = []
