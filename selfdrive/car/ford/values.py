@@ -11,7 +11,7 @@ class CarControllerParams:
 
   # ping pong fix
   SMOOTH_DELTA = 3
-  SMOOTH_FACTOR = 0.6
+  SMOOTH_FACTOR = 0.7
   SMOOTH_SECONDS = 3
 
 class CAR:
