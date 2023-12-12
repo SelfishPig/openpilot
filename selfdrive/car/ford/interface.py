@@ -17,7 +17,7 @@ class CarInterface(CarInterfaceBase):
     ret.steerRateCost = 0.5
     ret.steerActuatorDelay = 0.1
     ret.mass = 4770. * CV.LB_TO_KG + STD_CARGO_KG
-    ret.steerRatio = 17
+    ret.steerRatio = 14
     ret.wheelbase = 3.68
     ret.centerToFront = ret.wheelbase * 0.44
     ret.rotationalInertia = scale_rot_inertia(ret.mass, ret.wheelbase)
